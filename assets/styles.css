@@ -33,3 +33,31 @@
 select option{background:#fff;color:#1d150f}
 select option:checked{background:#9cc7f5;color:#102033}
 .toc .title{font-weight:750;line-height:1.18}
+
+/* Layout safety for long section titles (prevents heading overlap/clipping on medium screens) */
+.extras-head{
+  padding-block:clamp(28px,4vw,48px);
+}
+.extras-head h1{
+  font-size:clamp(2rem,4.8vw,4rem);
+  line-height:1.12;
+  margin:.12em 0 .38em;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  hyphens:auto;
+}
+@media (max-width:900px){
+  .extras-head h1{font-size:clamp(2rem,6.6vw,3.45rem);line-height:1.13}
+}
+@media (max-width:760px){
+  .extras-head{padding:24px 20px 30px}
+  .extras-head h1{font-size:clamp(1.95rem,10vw,3rem);line-height:1.14}
+}
+@media (max-width:420px){
+  .extras-head h1{font-size:clamp(1.85rem,11vw,2.55rem);line-height:1.15}
+}
+
+/* Dedicated LN cover cards: show full book covers without cropping. */
+.volume-chip-card img{height:auto!important;aspect-ratio:3/4!important;object-fit:contain!important;padding:6px;background:rgba(255,255,255,.035)}
+@media (max-width:760px){.volume-chip-card img{height:auto!important;aspect-ratio:3/4!important}}

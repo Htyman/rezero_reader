@@ -8,7 +8,7 @@
     "chapterStart": 1,
     "chapterEnd": 18,
     "count": 18,
-    "cover": "content/arc-6/images/ln/volume_21/0002.png",
+    "cover": "content/arc-6/covers/volume-21.png",
     "chapters": "volume-21/chapters.json",
     "gallery": "gallery.json"
   },
@@ -21,7 +21,7 @@
     "chapterStart": 19,
     "chapterEnd": 33,
     "count": 15,
-    "cover": "content/arc-6/images/ln/volume_22/0002.png",
+    "cover": "content/arc-6/covers/volume-22.png",
     "chapters": "volume-22/chapters.json",
     "gallery": "gallery.json"
   },
@@ -34,7 +34,7 @@
     "chapterStart": 34,
     "chapterEnd": 54,
     "count": 21,
-    "cover": "content/arc-6/images/ln/volume_23/0002.png",
+    "cover": "content/arc-6/covers/volume-23.png",
     "chapters": "volume-23/chapters.json",
     "gallery": "gallery.json"
   },
@@ -47,7 +47,7 @@
     "chapterStart": 55,
     "chapterEnd": 70,
     "count": 16,
-    "cover": "content/arc-6/images/ln/volume_24/0002.png",
+    "cover": "content/arc-6/covers/volume-24.png",
     "chapters": "volume-24/chapters.json",
     "gallery": "gallery.json"
   },
@@ -60,7 +60,7 @@
     "chapterStart": 71,
     "chapterEnd": 90,
     "count": 20,
-    "cover": "content/arc-6/images/ln/volume_25/0002.png",
+    "cover": "content/arc-6/covers/volume-25.png",
     "chapters": "volume-25/chapters.json",
     "gallery": "gallery.json"
   }
