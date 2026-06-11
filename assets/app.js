@@ -268,6 +268,9 @@ function setMainView(view){
   if(home) home.hidden = view !== 'home';
   if(reader) reader.hidden = view !== 'reader';
   if(extras) extras.hidden = view !== 'extras';
+  document.body.classList.toggle('reader-active', view === 'reader');
+  document.body.classList.toggle('home-active', view === 'home');
+  document.body.classList.toggle('extras-active', view === 'extras');
   updateQuickNav?.();
 }
 function imageWord(n){return declOfNum(n, ['изображение','изображения','изображений'])}
@@ -531,7 +534,11 @@ async function openArc(arcId, opts={}){
   $('#brandArcLabel').textContent = wantsExtras ? `${arcLabel()} · материалы` : `${arcLabel()} · читалка`;
   $('#homeArcTitle').textContent = arc.title;
   $('#homeArcDescription').textContent = arc.description || 'Выбери арку, затем начни чтение или продолжи с прошлого места.';
-  $('#startBtn').textContent = wantsExtras ? 'Открыть экстры' : 'Начать выбранную арку';
+  const startButton = $('#startBtn');
+  if(startButton){
+    startButton.textContent = 'Начать выбранную арку';
+    startButton.hidden = wantsExtras;
+  }
   $('#heroResumeBtn').hidden = wantsExtras;
   if($('#arcSelect')) $('#arcSelect').value = arc.id;
   buildToc(); buildGalleryTabs(); renderBookmarks(); renderExtras(); renderVolumeOverview(); updateResumeUI();
@@ -542,6 +549,7 @@ async function openArc(arcId, opts={}){
     updateProgressUI();
     return;
   }
+  if($('#startBtn')) $('#startBtn').hidden = false;
   $('#heroResumeBtn').hidden = false;
   if(opts.home){
     setMainView('home'); updateProgressUI(); document.title = `${arc.title} | Re:Zero Читалка`;
@@ -797,6 +805,29 @@ function renderGallery(){
   $$('.gallery-card').forEach(card=>card.addEventListener('click',()=>openLightbox(card.dataset.src, card.querySelector('img').alt)));
 }
 function openLightbox(src, alt=''){ const lb=$('#lightbox'); $('img',lb).src=src; $('img',lb).alt=alt; lb.hidden=false; }
+
+function updateHomeOverviewToggle(){
+  const card = document.querySelector('.hero-card');
+  const btn = $('#toggleHomeOverview');
+  if(!card || !btn) return;
+  const collapsed = card.classList.contains('overview-collapsed');
+  btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  btn.textContent = collapsed ? 'Показать описание' : 'Свернуть описание';
+}
+function toggleHomeOverview(){
+  const card = document.querySelector('.hero-card');
+  if(!card) return;
+  card.classList.toggle('overview-collapsed');
+  store.set(`${APP_KEY}.overviewCollapsed`, card.classList.contains('overview-collapsed'));
+  updateHomeOverviewToggle();
+}
+function restoreHomeOverviewState(){
+  const card = document.querySelector('.hero-card');
+  if(!card) return;
+  card.classList.toggle('overview-collapsed', !!store.get(`${APP_KEY}.overviewCollapsed`, false));
+  updateHomeOverviewToggle();
+}
+
 function attachImageHandlers(){ $$('#chapterContent img').forEach(img=>img.addEventListener('click',()=>openLightbox(img.currentSrc||img.src,img.alt))); }
 async function resume(preferCurrentArc=false){
   let last = preferCurrentArc ? store.get(lastKey(), null) : store.get(`${APP_KEY}.last`, null);
@@ -825,6 +856,8 @@ async function init(){
   }else{
     setMainView(isExtrasMode() ? 'extras' : 'home');
   }
+  restoreHomeOverviewState();
+  $('#toggleHomeOverview')?.addEventListener('click',toggleHomeOverview);
   $('#startBtn').addEventListener('click',()=>{ if(isExtrasMode()) setMainView('extras'); else openChapter(0); }); $('#heroResumeBtn').addEventListener('click',()=>resume(true)); $('#resumeBtn').addEventListener('click',()=>resume(false)); $('#resumeCardBtn')?.addEventListener('click',()=>resume(true));
   $('#prevChapter').addEventListener('click',()=>openChapter(state.current-1)); $('#nextChapter').addEventListener('click',()=>openChapter(state.current+1));
   $('#mobileToc')?.addEventListener('click',()=>$('#sidebar').classList.toggle('closed')); $('#mobilePrev')?.addEventListener('click',()=>openChapter(state.current-1)); $('#mobileNext')?.addEventListener('click',()=>openChapter(state.current+1));
@@ -846,7 +879,7 @@ async function init(){
   addEventListener('beforeunload',saveProgress);
   addEventListener('pagehide',saveProgress);
   document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') saveProgress(); });
-  addEventListener('hashchange',async ()=>{ const r=routeFromHash(); if(!r) return; if(!state.arc || r.arcId!==state.arc.id) await openArc(r.arcId,{home:!r.chapter}); if(isExtrasMode()){ const vol = r.chapter ? (String(r.chapter).match(/\d+/)?.[0] || 'all') : 'all'; selectExtrasVolume(vol); setMainView('extras'); updateProgressUI(); return; } if(!r.chapter){ setMainView('home'); updateProgressUI(); return; } const i=chapterIndexFromRouteChapter(r.chapter); if(i!=null && i!==state.current) await openChapter(i,{silentHash:true, restore:true}); });
+  addEventListener('hashchange',async ()=>{ const r=routeFromHash(); if(!r) return; if(!state.arc || r.arcId!==state.arc.id) await openArc(r.arcId,{home:!r.chapter}); if(isExtrasMode()){ const vol = r.chapter ? (String(r.chapter).match(/\d+/)?.[0] || 'all') : 'all'; selectExtrasVolume(vol); setMainView('extras'); updateProgressUI(); return; } if(!r.chapter){ setMainView('home'); updateProgressUI(); return; } const i=chapterIndexFromRouteChapter(r.chapter); if(i!=null){ if(i!==state.current || $('#reader').hidden) await openChapter(i,{silentHash:true, restore:true}); else setMainView('reader'); } });
   addEventListener('keydown',e=>{
     if(e.target.matches('input, textarea, select')) return;
     if(e.key==='Escape'){ closeDrawers(); $('#lightbox').hidden=true; }
