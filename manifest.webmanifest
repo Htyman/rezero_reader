@@ -5,6 +5,6 @@
   "display": "standalone",
   "background_color": "#17120d",
   "theme_color": "#17120d",
-  "description": "Статическая читалка Re:Zero с разделением по аркам для GitHub Pages",
+  "description": "Удобная читалка Re:Zero с разделением по аркам и томам, иллюстрациями и сохранением прогресса.",
   "icons": []
 }

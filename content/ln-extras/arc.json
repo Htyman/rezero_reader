@@ -6,7 +6,7 @@
   "status": "Иллюстрации",
   "folder": "content/ln-extras",
   "gallery": "gallery.json",
-  "description": "Отдельная вкладка с дополнительными LN-иллюстрациями. Материалы разложены по томам, чтобы не смешиваться с обычной галереей арки 6.",
+  "description": "Дополнительные иллюстрации и материалы к томам 21–25, собранные отдельно от основной арки.",
   "itemCount": 40,
   "volumeRange": "тома 21–25",
   "cover": "content/ln-extras/images/ln_extras/volume_21/0001.png"
