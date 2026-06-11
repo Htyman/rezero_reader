@@ -858,7 +858,7 @@ async function init(){
   }
   restoreHomeOverviewState();
   $('#toggleHomeOverview')?.addEventListener('click',toggleHomeOverview);
-  $('#startBtn').addEventListener('click',()=>{ if(isExtrasMode()) setMainView('extras'); else openChapter(0); }); $('#heroResumeBtn').addEventListener('click',()=>resume(true)); $('#resumeBtn').addEventListener('click',()=>resume(false)); $('#resumeCardBtn')?.addEventListener('click',()=>resume(true));
+  $('#startBtn').addEventListener('click',()=>{ if(isExtrasMode()) setMainView('extras'); else openChapter(0); }); $('#heroResumeBtn')?.addEventListener('click',()=>resume(true)); $('#resumeCardBtn')?.addEventListener('click',()=>resume(true));
   $('#prevChapter').addEventListener('click',()=>openChapter(state.current-1)); $('#nextChapter').addEventListener('click',()=>openChapter(state.current+1));
   $('#mobileToc')?.addEventListener('click',()=>$('#sidebar').classList.toggle('closed')); $('#mobilePrev')?.addEventListener('click',()=>openChapter(state.current-1)); $('#mobileNext')?.addEventListener('click',()=>openChapter(state.current+1));
   $('#mobileTop')?.addEventListener('click',scrollToTopFast); $('#scrollTopBtn')?.addEventListener('click',scrollToTopFast); $('#mobileSettings')?.addEventListener('click',()=>openDrawer('#settingsDrawer'));
