@@ -61,3 +61,29 @@ select option:checked{background:#9cc7f5;color:#102033}
 /* Dedicated LN cover cards: show full book covers without cropping. */
 .volume-chip-card img{height:auto!important;aspect-ratio:3/4!important;object-fit:contain!important;padding:6px;background:rgba(255,255,255,.035)}
 @media (max-width:760px){.volume-chip-card img{height:auto!important;aspect-ratio:3/4!important}}
+
+/* Mini fix: keep long Russian/English section titles inside cards on every width. */
+.hero-card h1,
+.extras-head h1{
+  max-width:100%;
+  line-height:1.08;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  text-wrap:balance;
+  hyphens:auto;
+}
+.hero h1{font-size:clamp(2.15rem,5vw,4.4rem)}
+.extras-head h1{font-size:clamp(2.05rem,4.35vw,3.65rem);line-height:1.1}
+.extras-head{padding-bottom:clamp(34px,5vw,56px)}
+@media (max-width:900px){
+  .hero h1{font-size:clamp(2rem,6vw,3.55rem)}
+  .extras-head h1{font-size:clamp(2rem,6vw,3.15rem);line-height:1.12}
+}
+@media (max-width:760px){
+  .hero h1{font-size:clamp(2rem,9vw,3rem)}
+  .extras-head h1{font-size:clamp(1.9rem,8.8vw,2.65rem);line-height:1.14}
+}
+@media (max-width:420px){
+  .hero h1{font-size:clamp(1.8rem,10vw,2.45rem)}
+  .extras-head h1{font-size:clamp(1.75rem,9.5vw,2.25rem)}
+}
