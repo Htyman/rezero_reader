@@ -100,3 +100,29 @@ body.reader-active #extrasView{display:none!important}
 .hero-card.overview-collapsed #arcGrid{display:none!important}
 .hero-card.overview-collapsed h1{margin-bottom:.18em}
 @media (max-width:760px){.overview-toggle{width:100%;justify-content:center}.hero-card.overview-collapsed{padding:22px}}
+
+/* Sidebar: make the whole menu scroll as one surface, so the chapter list can use the full panel height after the controls are scrolled away. */
+.sidebar{
+  display:block;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-gutter:stable;
+  overscroll-behavior:contain;
+}
+.sidebar .toc{
+  overflow:visible;
+  max-height:none;
+  padding-bottom:calc(24px + env(safe-area-inset-bottom));
+}
+.sidebar .side-head,
+.sidebar .arc-switcher,
+.sidebar .side-progress,
+.sidebar .searchbox.compact{
+  flex:none;
+}
+@media (max-width:760px){
+  .sidebar{
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    max-height:calc(100dvh - 84px - env(safe-area-inset-bottom));
+  }
+}
