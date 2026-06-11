@@ -30,7 +30,7 @@
       "description": "Отдельная вкладка с дополнительными LN-иллюстрациями. Материалы разложены по томам, чтобы не смешиваться с обычной галереей арки 6.",
       "itemCount": 40,
       "volumeRange": "тома 21–25",
-      "cover": "content/ln-extras/images/ln_extras/volume_21/0000.webp",
+      "cover": "content/ln-extras/images/ln_extras/volume_21/0000.png",
       "order": 99
     }
   ]

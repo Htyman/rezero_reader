@@ -215,6 +215,7 @@ function storeLastReading(percent=getScrollPercent()){
     chapterId: ch.id,
     chapterNumber: ch.number,
     chapterTitle: ch.title,
+    chapterDisplayTitle: chapterDisplayTitle(ch),
     volume: ch.volume || null,
     volumeTitle: ch.volumeTitle || '',
     index: state.current,
@@ -248,7 +249,7 @@ function updateResumeUI(){
   if(!card) return;
   if(last){
     card.hidden = false;
-    if(title) title.textContent = `${last.volumeTitle ? `${last.volumeTitle} · ` : ''}Глава ${last.chapterNumber}: ${last.chapterTitle}`;
+    if(title) title.textContent = `${last.volumeTitle ? `${last.volumeTitle} · ` : ''}${last.chapterDisplayTitle || chapterDisplayTitle({number:last.chapterNumber, title:last.chapterTitle})}`;
     if(meta) meta.textContent = `Остановился на ${Math.round((last.percent || 0)*100)}% · сохранено ${formatSavedTime(last.updated)}`;
     if(meter) meter.style.width = `${Math.round((last.percent || 0)*100)}%`;
   }else if(stats.started){
@@ -270,6 +271,32 @@ function setMainView(view){
   updateQuickNav?.();
 }
 function imageWord(n){return declOfNum(n, ['изображение','изображения','изображений'])}
+
+function chapterCoreTitle(ch={}, explicitNumber=null){
+  const n = Number(explicitNumber ?? ch.number ?? 0);
+  let t = String(ch.rawTitle || ch.title || ch.shortTitle || '').trim();
+  if(!t) return '';
+  t = t.replace(/^\s*(?:Арка\s*6|Шестая\s+арка)\s*(?:[—–-]|,)?\s*/iu, '');
+  const chapterRe = n
+    ? new RegExp(`^\\s*глава\\s*${n}\\s*(?:арки\\s*\\d+)?\\s*[.,:—–-]?\\s*`, 'iu')
+    : /^\s*глава\s*\d+\s*(?:арки\s*\d+)?\s*[.,:—–-]?\s*/iu;
+  t = t.replace(chapterRe, '');
+  t = t.replace(/^\s*[,.:;—–-]+\s*/, '');
+  for(let i=0; i<3; i++){
+    const before = t;
+    t = t.trim().replace(/^["'«»“”„『』「」]+/u, '').replace(/["'«»“”„『』「」]+$/u, '').trim();
+    if(t === before) break;
+  }
+  return t;
+}
+function chapterDisplayTitle(ch={}){
+  const n = ch.number || '';
+  const core = chapterCoreTitle(ch, n);
+  return core ? `Глава ${n} — ${core}` : `Глава ${n}`;
+}
+function chapterSearchBlob(ch={}){
+  return `${ch.number || ''} ${ch.title || ''} ${ch.shortTitle || ''} ${chapterCoreTitle(ch)} ${chapterDisplayTitle(ch)} ${ch.volumeTitle || ''}`;
+}
 function buildVolumeSummaries(items=state.gallery){
   const groups = new Map();
   for(const item of items){
@@ -283,6 +310,18 @@ function buildVolumeSummaries(items=state.gallery){
   }).sort((a,b)=>(Number(a.volume)||999)-(Number(b.volume)||999));
 }
 function showToast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.classList.remove('show'),1800)}
+
+function installImageFallbacks(){
+  document.addEventListener('error', e=>{
+    const img = e.target;
+    if(!(img instanceof HTMLImageElement)) return;
+    const src = img.getAttribute('src') || '';
+    if(/\.webp(?:$|\?)/i.test(src)){
+      const fallback = src.replace(/\.webp($|\?)/i, '.png$1');
+      if(fallback !== src){ img.src = fallback; }
+    }
+  }, true);
+}
 function applySettings(){
   const s = state.settings;
   document.documentElement.dataset.theme = s.theme;
@@ -464,6 +503,7 @@ async function openArc(arcId, opts={}){
     ...ch,
     id: ch.id || `ch-${String(i+1).padStart(3,'0')}`,
     number: ch.number || i+1,
+    rawTitle: ch.rawTitle || ch.title || ch.shortTitle || `Глава ${i+1}`,
     shortTitle: ch.shortTitle || ch.title || `Глава ${i+1}`,
     title: ch.title || `Глава ${i+1}`,
     text: ch.text || '',
@@ -531,7 +571,7 @@ function buildToc(filter=''){
     markActiveToc();
     return;
   }
-  const filtered = state.chapters.filter(ch => !q || `${ch.number} ${ch.title} ${ch.volumeTitle || ''}`.toLowerCase().includes(q));
+  const filtered = state.chapters.filter(ch => !q || chapterSearchBlob(ch).toLowerCase().includes(q));
   let lastVolume = null;
   toc.innerHTML = filtered.map((ch)=>{
     const i = state.chapters.indexOf(ch);
@@ -544,7 +584,7 @@ function buildToc(filter=''){
       const range = escapeHTML(vol?.range || ch.volumeRange || '');
       return `<div class="toc-volume"><span>${label}</span>${range ? `<small>${range}</small>` : ''}</div>`;
     })() : '';
-    return `${header}<a href="#${state.arc.id}/${ch.id}" data-index="${i}"><span class="num">${String(ch.number).padStart(2,'0')}</span><span class="title">${escapeHTML(ch.shortTitle||ch.title)}${ch.volume ? `<small>Том ${escapeHTML(ch.volume)}</small>` : ''}</span><span class="mini-progress"><span style="width:${p}%"></span></span></a>`;
+    return `${header}<a href="#${state.arc.id}/${ch.id}" data-index="${i}"><span class="num">${String(ch.number).padStart(2,'0')}</span><span class="title">${escapeHTML(chapterDisplayTitle(ch))}${ch.volume ? `<small>Том ${escapeHTML(ch.volume)}</small>` : ''}</span><span class="mini-progress"><span style="width:${p}%"></span></span></a>`;
   }).join('') || '<p class="empty">Ничего не найдено.</p>';
   $$('.toc a',toc).forEach(a=>a.addEventListener('click',()=>{ if(innerWidth<760) $('#sidebar').classList.add('closed') }));
   markActiveToc();
@@ -580,13 +620,14 @@ async function openChapter(index, opts={}){
   $('#chapterContent').innerHTML = '<p class="empty">Загружаю Markdown-главу…</p>';
   await loadChapterMarkdown(ch);
   if(location.hash !== `#${state.arc.id}/${ch.id}` && !opts.silentHash) history.pushState(null,'',`#${state.arc.id}/${ch.id}`);
-  document.title = `${ch.title} | ${arcLabel()} | Re:Zero`;
+  const displayTitle = chapterDisplayTitle(ch);
+  document.title = `${displayTitle} | ${arcLabel()} | Re:Zero`;
   const vol = volumeForChapter(ch);
   const volMeta = vol ? `${vol.title || `Том ${vol.number}`} · ` : '';
   const inVolMeta = vol && ch.chapterInVolume ? ` · в томе ${ch.chapterInVolume} из ${vol.count || '?'}` : '';
   $('#chapterMeta').textContent = `${arcLabel()} · ${volMeta}глава ${ch.number} из ${state.chapters.length}${inVolMeta}`;
   $('#readStats').textContent = `≈ ${ch.minutes || Math.max(1, Math.round((ch.words || 0)/220))} мин · ${(ch.words || 0).toLocaleString('ru-RU')} слов`;
-  $('#chapterTitle').textContent = ch.title;
+  $('#chapterTitle').textContent = displayTitle;
   $('#chapterContent').innerHTML = ch.html;
   $('#prevChapter').disabled = state.current===0; $('#nextChapter').disabled = state.current===state.chapters.length-1;
   $('#chapterNote').value = state.notes[ch.id] || '';
@@ -655,7 +696,7 @@ async function searchChapters(query){
   await ensureSearchText();
   const results=[];
   for(const ch of state.chapters){
-    const title = ch.title.toLowerCase(); const text = (ch.text || '').toLowerCase();
+    const title = chapterSearchBlob(ch).toLowerCase(); const text = (ch.text || '').toLowerCase();
     let idx = text.indexOf(q); let titleHit = title.includes(q);
     if(idx>=0 || titleHit){
       if(idx<0) idx=0;
@@ -667,13 +708,13 @@ async function searchChapters(query){
     }
   }
   results.sort((a,b)=>b.score-a.score || a.ch.number-b.ch.number);
-  box.innerHTML = results.slice(0,35).map(r=>`<div class="result-card" data-id="${r.ch.id}"><strong>${escapeHTML(r.ch.title)}</strong><small>${r.ch.volume ? `Том ${escapeHTML(r.ch.volume)} · ` : ''}Глава ${escapeHTML(r.ch.number)}</small><p>…${r.snip}…</p></div>`).join('') || '<p class="empty">Совпадений нет.</p>';
+  box.innerHTML = results.slice(0,35).map(r=>`<div class="result-card" data-id="${r.ch.id}"><strong>${escapeHTML(chapterDisplayTitle(r.ch))}</strong><small>${r.ch.volume ? `Том ${escapeHTML(r.ch.volume)} · ` : ''}Глава ${escapeHTML(r.ch.number)}</small><p>…${r.snip}…</p></div>`).join('') || '<p class="empty">Совпадений нет.</p>';
   $$('.result-card',box).forEach(el=>el.addEventListener('click',()=>{ const i=state.chapters.findIndex(c=>c.id===el.dataset.id); closeDrawers(); openChapter(i); }));
 }
 function addBookmark(){
   const ch=currentChapter(); if(!ch || !state.arc) return;
   const selected = String(getSelection()?.toString() || '').trim().replace(/\s+/g,' ').slice(0,240);
-  const bm = {id:crypto.randomUUID?.() || String(Date.now()), arcId:state.arc.id, arcTitle:arcLabel(), chapterId:ch.id, chapterNumber:ch.number, volume:ch.volume || null, volumeTitle:ch.volumeTitle || '', title:ch.title, percent:getScrollPercent(), quote:selected, created:Date.now()};
+  const bm = {id:crypto.randomUUID?.() || String(Date.now()), arcId:state.arc.id, arcTitle:arcLabel(), chapterId:ch.id, chapterNumber:ch.number, volume:ch.volume || null, volumeTitle:ch.volumeTitle || '', title:chapterDisplayTitle(ch), rawTitle:ch.title, percent:getScrollPercent(), quote:selected, created:Date.now()};
   state.bookmarks.unshift(bm); store.set(`${APP_KEY}.bookmarks`, state.bookmarks); renderBookmarks(); showToast(selected?'Закладка с цитатой добавлена':'Закладка добавлена');
 }
 function renderBookmarks(){
@@ -767,6 +808,7 @@ async function resume(preferCurrentArc=false){
   await openChapter(i, {restore:true, percent:last?.percent});
 }
 async function init(){
+  installImageFallbacks();
   applySettings();
   const defaultArc = await loadArcIndex();
   const route = routeFromHash();

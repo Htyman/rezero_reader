@@ -7,7 +7,7 @@
   "chapterStart": 34,
   "chapterEnd": 54,
   "count": 21,
-  "cover": "content/arc-6/images/ln/volume_23/0002.webp",
+  "cover": "content/arc-6/images/ln/volume_23/0002.png",
   "chapters": "chapters.json",
   "note": "Главы лежат обычными .md-файлами в папке chapters/. chapters.json хранит порядок, названия и ссылки на Markdown; сам текст сайт парсит из .md в браузере.",
   "chapterFolder": "chapters",

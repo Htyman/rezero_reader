@@ -27,3 +27,9 @@
 .resume-card{margin-top:18px;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--border));border-radius:24px;background:linear-gradient(135deg,rgba(217,167,75,.14),rgba(255,255,255,.04));padding:14px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1;box-shadow:0 14px 38px rgba(0,0,0,.15)}
 .resume-card[hidden]{display:none}.resume-card-main{display:grid;gap:7px;min-width:0;flex:1}.resume-card-main strong{font-size:1.06rem;line-height:1.28}.resume-card-main small{color:var(--muted);line-height:1.35}.small-primary{min-height:42px;padding:0 14px;white-space:nowrap}.save-status{display:block;margin-top:6px;color:var(--muted);line-height:1.35}.side-progress{margin:0 16px 10px;padding:12px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border));border-radius:18px;background:rgba(217,167,75,.07);display:grid;gap:8px}.side-progress[hidden]{display:none}.side-progress strong{font-size:.86rem;color:var(--accent2)}.side-progress small{color:var(--muted);line-height:1.35}.volume-progress-line{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:.78rem}.volume-chip-card .meter{height:6px}.volume-chip-card .meter span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 @media (max-width:760px){.resume-card{align-items:stretch;flex-direction:column;border-radius:22px}.resume-card .small-primary{width:100%}.side-progress{margin-left:12px;margin-right:12px}}
+
+
+/* Fixes: native select dropdown must stay readable on white OS popup backgrounds. */
+select option{background:#fff;color:#1d150f}
+select option:checked{background:#9cc7f5;color:#102033}
+.toc .title{font-weight:750;line-height:1.18}
