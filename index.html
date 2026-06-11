@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17120d">
+  <meta name="description" content="Удобная статическая читалка Re:Zero с разделением по аркам. Работает на GitHub Pages без сборки и сервера.">
+  <title>Re:Zero | Читалка по аркам</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="top-progress" id="topProgress" aria-hidden="true"></div>
+  <header class="appbar">
+    <button class="icon-btn" id="toggleSidebar" aria-label="Оглавление" title="Оглавление (T)">☰</button>
+    <a class="brand" href="#" aria-label="К первой главе">
+      <span class="brand-mark">✦</span>
+      <span><strong>Re:Zero</strong><small id="brandArcLabel">Библиотека арок</small></span>
+    </a>
+    <div class="app-actions">
+      <button class="ghost-btn" id="resumeBtn" title="Вернуться туда, где остановился">Продолжить</button>
+      <button class="icon-btn" id="openSearch" aria-label="Поиск" title="Поиск (/)">⌕</button>
+      <button class="icon-btn" id="openBookmarks" aria-label="Закладки" title="Закладки (B)">★</button>
+      <button class="icon-btn" id="openGallery" aria-label="Иллюстрации" title="Иллюстрации">◈</button>
+      <button class="icon-btn" id="openSettings" aria-label="Настройки" title="Настройки (S)">⚙</button>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar" aria-label="Оглавление">
+    <div class="side-head">
+      <div>
+        <strong>Оглавление</strong>
+        <small id="chapterCount">Загрузка…</small>
+      </div>
+      <button class="icon-btn small" id="closeSidebar" aria-label="Закрыть">×</button>
+    </div>
+    <div class="arc-switcher">
+      <label for="arcSelect">Арка</label>
+      <select id="arcSelect"></select>
+      <small><span id="activeArcTitle">Арка</span><span id="activeArcStatus"></span></small>
+    </div>
+    <div class="side-progress" id="sideProgress" hidden>
+      <strong id="sideProgressTitle">Прогресс</strong>
+      <div class="meter"><span id="sideProgressMeter"></span></div>
+      <small id="sideProgressMeta">0%</small>
+    </div>
+    <label class="searchbox compact"><span>⌕</span><input id="tocFilter" placeholder="Фильтр глав"></label>
+    <nav class="toc" id="toc"></nav>
+  </aside>
+
+  <main class="shell" id="shell">
+    <section class="hero" id="homeHero">
+      <div class="hero-card">
+        <p class="eyebrow">Статическая читалка · GitHub Pages ready · разделение по аркам</p>
+        <h1 id="homeArcTitle">Re:Zero — библиотека арок</h1>
+        <p id="homeArcDescription">Удобное чтение глав, локальный прогресс, поиск по тексту, закладки, заметки, настройки шрифта, темы, галерея иллюстраций и офлайн-кэш.</p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="startBtn">Начать выбранную арку</button>
+          <button class="ghost-btn" id="heroResumeBtn">Продолжить</button>
+        </div>
+        <div class="resume-card" id="resumeCard" hidden>
+          <div class="resume-card-main">
+            <span class="arc-kicker">Сохранённый прогресс</span>
+            <strong id="resumeTitle">Пока нет сохранённого места</strong>
+            <small id="resumeMeta">Начните читать — сайт запомнит главу и позицию.</small>
+            <div class="meter"><span id="resumeMeter"></span></div>
+          </div>
+          <button class="primary-btn small-primary" id="resumeCardBtn">Продолжить отсюда</button>
+        </div>
+        <div class="volume-overview" id="volumeOverview" hidden></div>
+        <div class="arc-grid" id="arcGrid" aria-label="Список арок"></div>
+      </div>
+    </section>
+
+    <article class="reader" id="reader" hidden>
+      <header class="reader-head">
+        <div class="crumbs"><span id="chapterMeta">Глава</span><span id="readStats"></span></div>
+        <h1 id="chapterTitle"></h1>
+        <div class="chapter-tools">
+          <button class="pill" id="prevChapter">← Предыдущая</button>
+          <button class="pill" id="addBookmark">★ Закладка</button>
+          <button class="pill" id="toggleNotes">✎ Заметка</button>
+          <button class="pill" id="nextChapter">Следующая →</button>
+        </div>
+      </header>
+      <div class="reader-grid">
+        <div class="chapter-content" id="chapterContent"></div>
+        <aside class="chapter-panel" id="chapterPanel">
+          <div class="mini-card">
+            <strong>Прогресс главы</strong>
+            <div class="meter"><span id="chapterMeter"></span></div>
+            <small id="chapterPercent">0%</small>
+            <small class="save-status" id="saveStatus">Автосохранение включено</small>
+          </div>
+          <div class="mini-card note-card">
+            <label for="chapterNote"><strong>Личная заметка</strong></label>
+            <textarea id="chapterNote" placeholder="Например: важная сцена, мысль, цитата…"></textarea>
+          </div>
+          <div class="mini-card shortcuts">
+            <strong>Горячие клавиши</strong>
+            <small>←/→ главы · / поиск · T меню · S настройки · B закладки · Esc закрыть</small>
+          </div>
+        </aside>
+      </div>
+    </article>
+
+    <section class="extras-view" id="extrasView" hidden>
+      <div class="extras-head">
+        <p class="eyebrow">Отдельный раздел · дополнительные материалы</p>
+        <h1 id="extrasTitle">LN Extras</h1>
+        <p id="extrasDescription">Дополнительные материалы, разложенные по томам.</p>
+        <div class="extras-stats" id="extrasStats"></div>
+      </div>
+      <div class="extras-volume-grid" id="extrasVolumeCards" aria-label="Тома с экстрами"></div>
+      <div class="extras-browser" id="extrasBrowserAnchor">
+        <div class="drawer-head inline-head"><h2 id="extrasGalleryTitle">Все экстры</h2><button class="ghost-btn" id="openExtrasGallery">Открыть как галерею</button></div>
+        <div class="tabs" id="extrasTabs"></div>
+        <div class="gallery extras-gallery" id="extrasGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <section class="drawer" id="searchDrawer" aria-modal="true" role="dialog" aria-labelledby="searchTitle" hidden>
+    <div class="drawer-panel wide">
+      <div class="drawer-head"><h2 id="searchTitle">Поиск по главам</h2><button class="icon-btn" data-close>×</button></div>
+      <label class="searchbox"><span>⌕</span><input id="globalSearch" placeholder="Введите фразу, имя, место…" autocomplete="off"></label>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </section>
+
+  <section class="drawer" id="settingsDrawer" aria-modal="true" role="dialog" aria-labelledby="settingsTitle" hidden>
+    <div class="drawer-panel">
+      <div class="drawer-head"><h2 id="settingsTitle">Настройки чтения</h2><button class="icon-btn" data-close>×</button></div>
+      <div class="settings-grid">
+        <label>Тема<select id="themeSelect"><option value="dark">Тёмная башня</option><option value="sepia">Сепия</option><option value="light">Светлая</option><option value="amoled">AMOLED</option></select></label>
+        <label>Шрифт<select id="fontSelect"><option value="system">Системный</option><option value="serif">Книжный serif</option><option value="sans">Чистый sans</option><option value="mono">Моно</option></select></label>
+        <label>Размер текста <output id="fontSizeOut"></output><input id="fontSize" type="range" min="16" max="26" step="1"></label>
+        <label>Интерлиньяж <output id="lineHeightOut"></output><input id="lineHeight" type="range" min="1.45" max="2.05" step="0.05"></label>
+        <label>Ширина строки <output id="widthOut"></output><input id="contentWidth" type="range" min="620" max="980" step="20"></label>
+        <label>Отступы между абзацами <output id="paraOut"></output><input id="paragraphGap" type="range" min="0.55" max="1.35" step="0.05"></label>
+      </div>
+      <div class="drawer-actions"><button class="ghost-btn" id="resetSettings">Сбросить</button></div>
+    </div>
+  </section>
+
+  <section class="drawer" id="bookmarksDrawer" aria-modal="true" role="dialog" aria-labelledby="bookmarksTitle" hidden>
+    <div class="drawer-panel">
+      <div class="drawer-head"><h2 id="bookmarksTitle">Закладки</h2><button class="icon-btn" data-close>×</button></div>
+      <div id="bookmarksList" class="bookmarks-list"></div>
+      <div class="drawer-actions"><button class="ghost-btn danger" id="clearBookmarks">Очистить закладки</button></div>
+    </div>
+  </section>
+
+  <section class="drawer" id="galleryDrawer" aria-modal="true" role="dialog" aria-labelledby="galleryTitle" hidden>
+    <div class="drawer-panel wide gallery-drawer">
+      <div class="drawer-head"><h2 id="galleryTitle">Иллюстрации</h2><button class="icon-btn" data-close>×</button></div>
+      <div class="tabs" id="galleryTabs"></div>
+      <div class="gallery" id="galleryGrid"></div>
+    </div>
+  </section>
+
+
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Вернуться наверх" title="Наверх">↑</button>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Быстрая навигация">
+    <button type="button" id="mobileToc" aria-label="Открыть оглавление"><span>☰</span><small>Главы</small></button>
+    <button type="button" id="mobilePrev" aria-label="Предыдущая глава"><span>←</span><small>Назад</small></button>
+    <button type="button" id="mobileTop" aria-label="Вернуться наверх"><span>↑</span><small>Вверх</small></button>
+    <button type="button" id="mobileNext" aria-label="Следующая глава"><span>→</span><small>Далее</small></button>
+    <button type="button" id="mobileSettings" aria-label="Настройки чтения"><span>⚙</span><small>Текст</small></button>
+  </nav>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+  <div class="lightbox" id="lightbox" hidden><button class="icon-btn" aria-label="Закрыть">×</button><img alt=""></div>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "id": "volume-22",
+  "number": 22,
+  "title": "Том 22",
+  "shortTitle": "Том 22",
+  "range": "Главы 19–33",
+  "chapterStart": 19,
+  "chapterEnd": 33,
+  "count": 15,
+  "cover": "content/arc-6/images/ln/volume_22/0002.webp",
+  "chapters": "chapters.json",
+  "note": "Главы лежат обычными .md-файлами в папке chapters/. chapters.json хранит порядок, названия и ссылки на Markdown; сам текст сайт парсит из .md в браузере.",
+  "chapterFolder": "chapters",
+  "markdown": true
+}

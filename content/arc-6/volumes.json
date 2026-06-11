@@ -1,0 +1,67 @@
+[
+  {
+    "id": "volume-21",
+    "number": 21,
+    "title": "Том 21",
+    "shortTitle": "Том 21",
+    "range": "Главы 1–18",
+    "chapterStart": 1,
+    "chapterEnd": 18,
+    "count": 18,
+    "cover": "content/arc-6/images/ln/volume_21/0002.webp",
+    "chapters": "volume-21/chapters.json",
+    "gallery": "gallery.json"
+  },
+  {
+    "id": "volume-22",
+    "number": 22,
+    "title": "Том 22",
+    "shortTitle": "Том 22",
+    "range": "Главы 19–33",
+    "chapterStart": 19,
+    "chapterEnd": 33,
+    "count": 15,
+    "cover": "content/arc-6/images/ln/volume_22/0002.webp",
+    "chapters": "volume-22/chapters.json",
+    "gallery": "gallery.json"
+  },
+  {
+    "id": "volume-23",
+    "number": 23,
+    "title": "Том 23",
+    "shortTitle": "Том 23",
+    "range": "Главы 34–54",
+    "chapterStart": 34,
+    "chapterEnd": 54,
+    "count": 21,
+    "cover": "content/arc-6/images/ln/volume_23/0002.webp",
+    "chapters": "volume-23/chapters.json",
+    "gallery": "gallery.json"
+  },
+  {
+    "id": "volume-24",
+    "number": 24,
+    "title": "Том 24",
+    "shortTitle": "Том 24",
+    "range": "Главы 55–70",
+    "chapterStart": 55,
+    "chapterEnd": 70,
+    "count": 16,
+    "cover": "content/arc-6/images/ln/volume_24/0002.webp",
+    "chapters": "volume-24/chapters.json",
+    "gallery": "gallery.json"
+  },
+  {
+    "id": "volume-25",
+    "number": 25,
+    "title": "Том 25",
+    "shortTitle": "Том 25",
+    "range": "Главы 71–90",
+    "chapterStart": 71,
+    "chapterEnd": 90,
+    "count": 20,
+    "cover": "content/arc-6/images/ln/volume_25/0002.webp",
+    "chapters": "volume-25/chapters.json",
+    "gallery": "gallery.json"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "name": "Re:Zero — читалка по аркам",
+  "short_name": "ReZero Reader",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#17120d",
+  "theme_color": "#17120d",
+  "description": "Статическая читалка Re:Zero с разделением по аркам для GitHub Pages",
+  "icons": []
+}

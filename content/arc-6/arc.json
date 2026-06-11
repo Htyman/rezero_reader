@@ -1,0 +1,17 @@
+{
+  "id": "arc-6",
+  "number": 6,
+  "title": "Арка 6 — Сторожевая башня Плеяд",
+  "shortTitle": "Арка 6",
+  "status": "Готов перевод",
+  "folder": "content/arc-6",
+  "chapters": null,
+  "gallery": "gallery.json",
+  "description": "Текущая готовая арка: 90 Markdown-глав (.md), разложенных по LN-томам 21–25; обычные иллюстрации, поиск, закладки и прогресс чтения.",
+  "chapterCount": 90,
+  "volumeRange": "LN тома 21–25",
+  "volumes": "volumes.json",
+  "volumeCount": 5,
+  "mode": "chapters",
+  "contentFormat": "markdown"
+}

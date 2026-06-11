@@ -1,0 +1,37 @@
+{
+  "defaultArc": "arc-6",
+  "arcs": [
+    {
+      "id": "arc-6",
+      "number": 6,
+      "title": "Арка 6 — Сторожевая башня Плеяд",
+      "shortTitle": "Арка 6",
+      "status": "Готов перевод",
+      "folder": "content/arc-6",
+      "chapters": null,
+      "gallery": "gallery.json",
+      "description": "Готовая арка: 90 Markdown-глав (.md), разложенных по LN-томам 21–25. Сайт сам парсит .md, сохраняет прогресс, закладки и заметки локально.",
+      "chapterCount": 90,
+      "volumeRange": "LN тома 21–25",
+      "mode": "chapters",
+      "order": 6,
+      "volumes": "volumes.json",
+      "volumeCount": 5,
+      "contentFormat": "markdown"
+    },
+    {
+      "id": "ln-extras",
+      "mode": "extras",
+      "title": "LN Extras — дополнительные материалы",
+      "shortTitle": "Экстры",
+      "status": "Иллюстрации",
+      "folder": "content/ln-extras",
+      "gallery": "gallery.json",
+      "description": "Отдельная вкладка с дополнительными LN-иллюстрациями. Материалы разложены по томам, чтобы не смешиваться с обычной галереей арки 6.",
+      "itemCount": 40,
+      "volumeRange": "тома 21–25",
+      "cover": "content/ln-extras/images/ln_extras/volume_21/0000.webp",
+      "order": 99
+    }
+  ]
+}

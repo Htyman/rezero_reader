@@ -1,0 +1,32 @@
+[
+  {
+    "volume": 21,
+    "title": "Том 21",
+    "count": 7,
+    "cover": "content/ln-extras/images/ln_extras/volume_21/0000.webp"
+  },
+  {
+    "volume": 22,
+    "title": "Том 22",
+    "count": 9,
+    "cover": "content/ln-extras/images/ln_extras/volume_22/0000.webp"
+  },
+  {
+    "volume": 23,
+    "title": "Том 23",
+    "count": 8,
+    "cover": "content/ln-extras/images/ln_extras/volume_23/0000.webp"
+  },
+  {
+    "volume": 24,
+    "title": "Том 24",
+    "count": 8,
+    "cover": "content/ln-extras/images/ln_extras/volume_24/0000.webp"
+  },
+  {
+    "volume": 25,
+    "title": "Том 25",
+    "count": 8,
+    "cover": "content/ln-extras/images/ln_extras/volume_25/0000.webp"
+  }
+]

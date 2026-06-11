@@ -1,0 +1,15 @@
+{
+  "id": "volume-21",
+  "number": 21,
+  "title": "Том 21",
+  "shortTitle": "Том 21",
+  "range": "Главы 1–18",
+  "chapterStart": 1,
+  "chapterEnd": 18,
+  "count": 18,
+  "cover": "content/arc-6/images/ln/volume_21/0002.webp",
+  "chapters": "chapters.json",
+  "note": "Главы лежат обычными .md-файлами в папке chapters/. chapters.json хранит порядок, названия и ссылки на Markdown; сам текст сайт парсит из .md в браузере.",
+  "chapterFolder": "chapters",
+  "markdown": true
+}
